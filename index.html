@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Biblioteca de Voces ORCUS</title>
+  <meta name="description" content="Biblioteca central de audios de los proyectos de ORCUS Technology.">
+  <style>
+    /* Layout: lista de proyectos; cada proyecto es una tabla de pistas tipo archivo sonoro. */
+    :root {
+      --bg: #f6f5f1; --surface: #ffffff; --ink: #1f2421; --muted: #646b66; --line: #e2e0d8;
+      --accent: #1B3B2B; --gold: #D4A346; --ok: #2f7a4a; --warn: #9a6a12;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+      --bg: #151816; --surface: #1d211f; --ink: #ecebe6; --muted: #a5aba7; --line: #2f3431;
+      --accent: #9fd1b2; --gold: #e0b45c; --ok: #7fd09c; --warn: #e3b25a; color-scheme: dark } }
+    :root[data-theme="dark"] {
+      --bg: #151816; --surface: #1d211f; --ink: #ecebe6; --muted: #a5aba7; --line: #2f3431;
+      --accent: #9fd1b2; --gold: #e0b45c; --ok: #7fd09c; --warn: #e3b25a; color-scheme: dark }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 1rem/1.55 var(--font); padding-inline: 16px; padding-block: 0 3rem; }
+    .wrap { max-width: 60rem; margin: 0 auto; }
+    header { padding-block: 2.25rem 1.5rem; display: grid; gap: .4rem; border-bottom: 1px solid var(--line); }
+    .eyebrow { font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+    h1 { margin: 0; font-family: var(--serif); font-size: clamp(1.8rem, 6vw, 2.4rem); line-height: 1.1; color: var(--accent); text-wrap: balance; }
+    header p { margin: 0; color: var(--muted); max-width: 40rem; }
+    .stats { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; margin-top: .5rem; font-variant-numeric: tabular-nums; }
+    .stats b { font-size: 1.25rem; color: var(--ink); }
+    .stats span { color: var(--muted); font-size: .9rem; }
+    .tools { display: flex; gap: .5rem; padding-block: 1.25rem; }
+    .tools input { flex: 1; min-width: 0; font: inherit; padding: .6rem .85rem; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); }
+    section { padding-block: 1rem 1.5rem; }
+    .proj-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .25rem 1rem; margin-bottom: .75rem; }
+    h2 { margin: 0; font-family: var(--serif); font-size: 1.35rem; }
+    .proj-head a { color: var(--accent); font-size: .9rem; }
+    .meta { color: var(--muted); font-size: .85rem; }
+    .tracks { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+    .track { display: grid; grid-template-columns: 2.75rem minmax(0, 1fr) auto; gap: .25rem 1rem; align-items: center; padding: .8rem 1rem; border-top: 1px solid var(--line); }
+    .track:first-child { border-top: 0; }
+    .play { width: 2.5rem; height: 2.5rem; border-radius: 50%; border: 0; background: var(--accent); color: var(--surface); display: grid; place-items: center; cursor: pointer; }
+    .play[disabled] { background: var(--line); color: var(--muted); cursor: default; }
+    .play svg { width: 1rem; height: 1rem; fill: currentColor; }
+    .t-title { font-weight: 650; line-height: 1.3; }
+    .t-sub { font-size: .85rem; color: var(--muted); }
+    .t-id { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .78rem; color: var(--muted); }
+    .right { display: grid; justify-items: end; gap: .3rem; }
+    .pill { font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border-radius: 999px; padding: .15rem .55rem; border: 1px solid currentColor; }
+    .pill.ok { color: var(--ok); } .pill.warn { color: var(--warn); }
+    .dur { font-size: .85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .copy { font: inherit; font-size: .8rem; background: none; border: 0; color: var(--accent); cursor: pointer; padding: 0; text-decoration: underline; }
+    audio { grid-column: 2 / -1; width: 100%; height: 2.25rem; margin-top: .25rem; }
+    .howto { margin-top: 1.5rem; padding: 1rem 1.25rem; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--gold); border-radius: 0 12px 12px 0; }
+    .howto h3 { margin: 0 0 .4rem; font-size: 1rem; }
+    .howto ol { margin: 0; padding-left: 1.2rem; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .85em; background: var(--bg); padding: .05rem .3rem; border-radius: 4px; overflow-wrap: anywhere; }
+    .empty, .err { color: var(--muted); padding: 1rem 0; }
+    :focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+    @media (max-width: 520px) {
+      .track { grid-template-columns: 2.75rem minmax(0, 1fr); }
+      .right { grid-column: 2; justify-items: start; grid-auto-flow: column; align-items: center; }
+      audio { grid-column: 1 / -1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <span class="eyebrow">ORCUS Technology · Quibdó, Chocó</span>
+      <h1>Biblioteca de Voces</h1>
+      <p>Archivo central de grabaciones de los proyectos comunitarios. Las apps de cada proyecto leen el catálogo y reproducen desde aquí.</p>
+      <div class="stats" id="stats"></div>
+    </header>
+
+    <div class="tools">
+      <input id="q" type="search" placeholder="Buscar por proyecto, título o narrador" aria-label="Buscar pistas">
+    </div>
+
+    <main id="lista"><p class="empty">Cargando catálogo…</p></main>
+
+    <aside class="howto">
+      <h3>Cómo agregar una grabación</h3>
+      <ol>
+        <li>Verifique que la persona firmó el consentimiento de uso de voz.</li>
+        <li>Prepare el archivo: <code>./herramientas/preparar-audio.sh grabacion.m4a proyectos/&lt;proyecto&gt;/&lt;id&gt;.mp3</code></li>
+        <li>En <code>catalogo.json</code>, cambie la pista a <code>"estado": "publicado"</code> y <code>"consentimiento": true</code>.</li>
+        <li>Suba los cambios al repositorio. En 1–2 minutos la app lo reproduce.</li>
+      </ol>
+    </aside>
+  </div>
+
+  <script>
+    (() => {
+      "use strict";
+      const $ = id => document.getElementById(id);
+      const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+      const PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+      let catalogo = null;
+
+      fetch("catalogo.json", { cache: "no-cache" })
+        .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(c => { catalogo = c; pintar(""); })
+        .catch(() => { $("lista").innerHTML = '<p class="err">No se pudo leer catalogo.json. Revise que el archivo exista y sea JSON válido.</p>'; });
+
+      $("q").addEventListener("input", e => pintar(e.target.value.trim().toLowerCase()));
+
+      function pintar(q) {
+        const proyectos = catalogo.proyectos || [];
+        let total = 0, pub = 0;
+        proyectos.forEach(p => p.pistas.forEach(t => { total++; if (t.estado === "publicado") pub++; }));
+        $("stats").innerHTML =
+          `<div><b>${proyectos.length}</b> <span>proyecto${proyectos.length === 1 ? "" : "s"}</span></div>` +
+          `<div><b>${pub}</b> <span>publicadas</span></div>` +
+          `<div><b>${total - pub}</b> <span>pendientes de grabar</span></div>`;
+
+        const html = proyectos.map(p => {
+          const pistas = p.pistas.filter(t => !q || [p.nombre, t.titulo, t.narrador, t.id].join(" ").toLowerCase().includes(q));
+          if (!pistas.length) return "";
+          return `<section>
+            <div class="proj-head">
+              <div><h2>${esc(p.nombre)}</h2><div class="meta">${esc(p.lugar || "")} · id <code>${esc(p.id)}</code></div></div>
+              ${p.app ? `<a href="${esc(p.app)}" target="_blank" rel="noopener">Abrir la app →</a>` : ""}
+            </div>
+            <ul class="tracks">${pistas.map(t => fila(t)).join("")}</ul>
+          </section>`;
+        }).join("");
+        $("lista").innerHTML = html || '<p class="empty">Ninguna pista coincide con la búsqueda.</p>';
+      }
+
+      function fila(t) {
+        const ok = t.estado === "publicado" && t.archivo;
+        const url = t.archivo ? new URL(t.archivo, location.href).href : "";
+        return `<li class="track">
+          <button class="play" type="button" ${ok ? `data-src="${esc(url)}"` : "disabled"} aria-label="${ok ? "Reproducir" : "Sin grabación"}: ${esc(t.titulo)}">${PLAY}</button>
+          <div style="min-width:0">
+            <div class="t-title">${esc(t.titulo)}</div>
+            <div class="t-sub">${esc(t.narrador || "Narrador por definir")}</div>
+            <div class="t-id">${esc(t.id)}</div>
+          </div>
+          <div class="right">
+            <span class="pill ${ok ? "ok" : "warn"}">${ok ? "Publicado" : "Pendiente"}</span>
+            <span class="dur">${esc(t.duracion || "")}</span>
+            ${ok ? `<button class="copy" type="button" data-url="${esc(url)}">Copiar enlace</button>` : ""}
+          </div>
+        </li>`;
+      }
+
+      $("lista").addEventListener("click", e => {
+        const b = e.target.closest(".play[data-src]");
+        if (b) {
+          const li = b.closest(".track");
+          let a = li.querySelector("audio");
+          document.querySelectorAll(".track audio").forEach(x => { if (x !== a) x.pause(); });
+          if (!a) { a = document.createElement("audio"); a.controls = true; a.preload = "none"; a.src = b.dataset.src; li.appendChild(a); }
+          a.play().catch(() => {});
+          return;
+        }
+        const c = e.target.closest(".copy");
+        if (c) {
+          const done = () => { c.textContent = "Enlace copiado"; setTimeout(() => c.textContent = "Copiar enlace", 1800); };
+          (navigator.clipboard ? navigator.clipboard.writeText(c.dataset.url) : Promise.reject()).then(done, () => { c.textContent = c.dataset.url; c.style.userSelect = "all"; });
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

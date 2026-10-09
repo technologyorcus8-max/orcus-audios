@@ -10,10 +10,44 @@
       "lugar": "Mumbú, Tadó, Chocó",
       "app": "https://technologyorcus8-max.github.io/memorias-vivas-mumbu/",
       "pistas": [
-        { "id": "estacion-01", "titulo": "El Abrazo del Río y la Bienvenida", "narrador": "Por definir en asamblea (ejemplo: Tía Rosalba)", "archivo": "proyectos/memorias-vivas-mumbu/estacion-01.mp3", "duracion": "2:30", "estado": "pendiente", "consentimiento": false },
-        { "id": "estacion-02", "titulo": "El Alambique y el Viche Ancestral", "narrador": "Por definir (ejemplo: Maestro Destilador Eusebio)", "archivo": "proyectos/memorias-vivas-mumbu/estacion-02.mp3", "duracion": "2:00", "estado": "pendiente", "consentimiento": false },
-        { "id": "estacion-03", "titulo": "La Farmacia de Azotea y el Pancoger", "narrador": "Por definir (ejemplo: Doña Ana Lucía)", "archivo": "proyectos/memorias-vivas-mumbu/estacion-03.mp3", "duracion": "2:00", "estado": "pendiente", "consentimiento": false },
-        { "id": "estacion-04", "titulo": "La Batea que no Envenena", "narrador": "Por definir (ejemplo: Doña Etelvina)", "archivo": "proyectos/memorias-vivas-mumbu/estacion-04.mp3", "duracion": "2:00", "estado": "pendiente", "consentimiento": false }
+        {
+          "id": "estacion-01",
+          "titulo": "El Abrazo del Río y la Bienvenida",
+          "narrador": "Por definir en asamblea (ejemplo: Tía Rosalba)",
+          "archivo": "proyectos/memorias-vivas-mumbu/estacion-01.mp3",
+          "duracion": "1:42",
+          "estado": "publicado",
+          "consentimiento": false,
+          "nota": "Grabación de muestra para el demo (2026-10-09)"
+        },
+        {
+          "id": "estacion-02",
+          "titulo": "El Alambique y el Viche Ancestral",
+          "narrador": "Por definir (ejemplo: Maestro Destilador Eusebio)",
+          "archivo": "proyectos/memorias-vivas-mumbu/estacion-02.mp3",
+          "duracion": "1:20",
+          "estado": "publicado",
+          "consentimiento": false,
+          "nota": "Grabación de muestra para el demo (2026-10-09)"
+        },
+        {
+          "id": "estacion-03",
+          "titulo": "La Farmacia de Azotea y el Pancoger",
+          "narrador": "Por definir (ejemplo: Doña Ana Lucía)",
+          "archivo": "proyectos/memorias-vivas-mumbu/estacion-03.mp3",
+          "duracion": "2:00",
+          "estado": "pendiente",
+          "consentimiento": false
+        },
+        {
+          "id": "estacion-04",
+          "titulo": "La Batea que no Envenena",
+          "narrador": "Por definir (ejemplo: Doña Etelvina)",
+          "archivo": "proyectos/memorias-vivas-mumbu/estacion-04.mp3",
+          "duracion": "2:00",
+          "estado": "pendiente",
+          "consentimiento": false
+        }
       ]
     }
   ]
